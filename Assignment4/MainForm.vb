@@ -4,6 +4,9 @@
     Private numOfReservedSeats As Integer = 0
     Private Const m_numOfSeats As Integer = 64
 
+    'Declare a reference variable of the SeatManager type
+    Private m_seatManager As SeatManager
+
 
     Public Sub New()
 
@@ -11,6 +14,7 @@
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
+        m_seatManager = New SeatManager(m_numOfSeats)
         InitializeGUI()
 
     End Sub
@@ -68,10 +72,8 @@
             lstSeats.Items.Insert(index, strOut)
         End If
 
-
         lblNumOfReservedSeats.Text = numOfReservedSeats.ToString()
         lblNumOfVacantSeats.Text = (totalNumberOfSeats - numOfReservedSeats).ToString()
-
 
     End Sub
 

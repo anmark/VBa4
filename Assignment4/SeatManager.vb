@@ -160,6 +160,13 @@
         Return seatInfo
     End Function
 
+    ''' <summary>
+    ''' This method prepares an array of strings with information about all seats.
+    ''' Each element is a string formatted using the GetSeatInfo function.
+    ''' </summary>
+    ''' <param name="choice"></param>
+    ''' <returns>An array of strings</returns>
+    ''' <remarks></remarks>
     Public Function GetSeatInfoStrings(ByVal choice As DisplayOptions) As String()
         'Dim count As Integer = GetNumOfSeats(choice)
         Dim count As Integer = GetNumOfSeats()
