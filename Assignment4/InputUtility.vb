@@ -1,7 +1,8 @@
 ﻿Option Explicit On
 Option Strict On
 
-
+'InputUtility.vb
+'Created: By Anmar Khazal 2013-10-31
 
 ''' <summary>
 ''' This is a helper class that

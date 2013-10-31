@@ -1,4 +1,10 @@
-﻿Public Class SeatManager
+﻿Option Explicit On
+Option Strict On
+
+'SeatManager.vb
+'Created: By Anmar Khazal 2013-10-31
+
+Public Class SeatManager
     'Input variables
     'initialized in the constructor
     Private ReadOnly m_totNumOfSeats As Integer
@@ -35,14 +41,6 @@
         'm_priceMatrix = New Integer(m_totNumOfRows - 1, m_totNumOfCols - 1) {}
         'm_nameMatrix = New String(m_totNumOfRows - 1, m_totNumOfCols - 1) {}
 
-        '  For row As Integer = 0 To m_totNumOfRows - 1
-        ''You may have code for every row here
-        'For col As Integer = 0 To m_totNumOfCols - 1
-        'here comes code to be executed for
-        'every column of the current row.
-        'Next
-        'Next
-
     End Sub
 
     ''' <summary>
@@ -69,7 +67,7 @@
         ' Loop over each element
         For Each name As String In m_nameList
             If (Not String.IsNullOrEmpty(name)) Then
-                numberOfReservedSeats += numberOfReservedSeats
+                numberOfReservedSeats += 1
             End If
         Next
         Return numberOfReservedSeats
@@ -81,11 +79,11 @@
     ''' <returns>Number of vacant seats</returns>
     ''' <remarks></remarks>
     Public Function GetNumVacant() As Integer
-        Dim numberOfVacantSeats As Integer = 0
+        Dim numberOfVacantSeats As Integer = -1
         ' Loop over each element
         For Each name As String In m_nameList
             If (String.IsNullOrEmpty(name)) Then
-                numberOfVacantSeats += numberOfVacantSeats
+                numberOfVacantSeats += 1
             End If
         Next
         Return numberOfVacantSeats
@@ -111,12 +109,15 @@
     ''' <remarks></remarks>
     Public Function ReserveSeat(ByVal name As String, ByVal price As Double, _
                           ByVal index As Integer) As Boolean
-        If (String.IsNullOrEmpty(m_nameList(index))) Then
-            m_nameList(index) = name
-            m_priceList(index) = price
-            Return True
-        Else
-            Return False
+        If (CheckIndex(index)) Then
+            If (String.IsNullOrEmpty(m_nameList(index))) Then
+                m_nameList(index) = name
+                m_priceList(index) = price
+                Return True
+            Else
+                Return False
+            End If
+
         End If
     End Function
 
@@ -130,12 +131,14 @@
     ''' <returns>True if seat was successfully canceled, false if the seat is already vacant</returns>
     ''' <remarks></remarks>
     Public Function CancelSeat(ByVal index As Integer) As Boolean
-        If (Not String.IsNullOrEmpty(m_nameList(index))) Then
-            m_nameList(index) = Nothing
-            m_priceList(index) = 0.0
-            Return True
-        Else
-            Return False
+        If (CheckIndex(index)) Then
+            If (Not String.IsNullOrEmpty(m_nameList(index))) Then
+                m_nameList(index) = Nothing
+                m_priceList(index) = 0.0
+                Return True
+            Else
+                Return False
+            End If
         End If
     End Function
 
@@ -148,16 +151,20 @@
     ''' <remarks></remarks>
     Public Function GetSeatInfoAt(ByVal index As Integer) As String
         Dim status As String
-        If (String.IsNullOrEmpty(m_nameList(index))) Then
-            status = "Vacant"
-        Else
-            status = "Reserved"
+        If (CheckIndex(index)) Then
+            If (String.IsNullOrEmpty(m_nameList(index))) Then
+                status = "Vacant"
+            Else
+                status = "Reserved"
+            End If
+
+            Dim customerName As String = m_nameList(index)
+            Dim price As Double = m_priceList(index)
+            Dim seatInfo As String = String.Format("{0, 5} {1, -8} {2, -18} {3, 10:f2}", index + 1, status, customerName, price)
+            Return seatInfo
         End If
 
-        Dim customerName As String = m_nameList(index)
-        Dim price As String = m_priceList(index).ToString
-        Dim seatInfo As String = String.Format("{0, 5} {1, -8} {2, -18} {3, 10:f2}", index + 1, status, customerName, price)
-        Return seatInfo
+        Return "Index Error"
     End Function
 
     ''' <summary>
@@ -167,7 +174,8 @@
     ''' <param name="choice"></param>
     ''' <returns>An array of strings</returns>
     ''' <remarks></remarks>
-    Public Function GetSeatInfoStrings(ByVal choice As DisplayOptions) As String()
+    ''' Public Function GetSeatInfoStrings(ByVal choice As DisplayOptions) As String()
+    Public Function GetSeatInfoStrings() As String()
         'Dim count As Integer = GetNumOfSeats(choice)
         Dim count As Integer = GetNumOfSeats()
 
